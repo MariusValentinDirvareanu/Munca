@@ -30,9 +30,19 @@ object Form1: TForm1
   object btnGenerate: TButton
     Left = 8
     Top = 640
-    Width = 644
+    Width = 305
     Height = 37
     Caption = 'Go!'
     TabOrder = 1
+    OnClick = btnGenerateClick
+  end
+  object btnStop: TButton
+    Left = 352
+    Top = 640
+    Width = 300
+    Height = 37
+    Caption = 'Stop'
+    TabOrder = 2
+    OnClick = btnStopClick
   end
 end
