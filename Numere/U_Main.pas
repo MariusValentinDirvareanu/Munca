@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, U_ThreadNumerePare,
-  U_ThreadNumereImpare, U_ThreadNumerePrime;
+  U_ThreadNumereImpare, U_ThreadNumerePrime, System.SyncObjs;
 
 type
   TForm1 = class(TForm)
@@ -14,17 +14,19 @@ type
     btnGenerate: TButton;
     btnStop: TButton;
     procedure btnGenerateClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure btnStopClick(Sender: TObject);
   private
     { Private declarations }
   public
+    CS: TCriticalSection;
     { Public declarations }
   end;
 
 var
   Form1: TForm1;
-  //TNumerePare: TThreadNumerePare;
-  //TNumereImpare: TThreadNumereImpare;
+  TNumerePare: TThreadNumerePare;
+  TNumereImpare: TThreadNumereImpare;
   TNumerePrime: TThreadNumerePrime;
 
 implementation
@@ -34,16 +36,23 @@ implementation
 procedure TForm1.btnGenerateClick(Sender: TObject);
 
 begin
-  //TNumerePare := TThreadNumerePare.Create(False);
-  //TNumereImpare := TThreadNumereImpare.Create(False);
-  TNumerePrime:=TThreadNumerePrime.Create(False);
+  TNumerePare := TThreadNumerePare.Create(False);
+  TNumereImpare := TThreadNumereImpare.Create(False);
+  TNumerePrime := TThreadNumerePrime.Create(False);
+
 end;
 
 procedure TForm1.btnStopClick(Sender: TObject);
 begin
-  //TNumerePare.Terminate;
-  //TNumereImpare.Terminate;
-  TNumerePrime.Terminate;
+  // Nu merge
+  TNumerePare.Free;
+  TNumereImpare.Free;
+  TNumerePrime.Free;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+  CS := TCriticalSection.Create;
 end;
 
 end.

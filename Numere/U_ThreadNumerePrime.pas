@@ -2,7 +2,7 @@ unit U_ThreadNumerePrime;
 
 interface
 
-uses Classes, System.SysUtils, System.Math;
+uses Classes, System.SysUtils, System.Math, System.SyncObjs;
 
 type
   TThreadNumerePrime = class(TThread)
@@ -13,8 +13,7 @@ type
     constructor Create(bSuspended: Boolean);
 
   private
-    FNumar: Integer;
-    procedure AfiseazaNumar;
+    function Prim(x: Integer): Boolean;
   end;
 
 implementation
@@ -30,38 +29,46 @@ begin
     Resume;
 end;
 
-procedure TThreadNumerePrime.AfiseazaNumar;
-begin
-  Form1.mmoNumere.Text := Form1.mmoNumere.Text + FNumar.ToString + sLineBreak;
-end;
-
 procedure TThreadNumerePrime.Execute;
 var
-  i, j: Integer;
-  limita: Integer;
-  prim: Boolean;
+  i: Integer;
 
 begin
-  while not Terminated do
-  begin
-    for i := 1 to 100 do
+  Form1.CS.Enter;
+  try
+    for i := 2 to MaxInt do
     begin
-      prim := False;
-      limita := trunc(Sqrt(i)) + 1;
-      for j := 2 to limita do
-        if (i mod j = 0) then
-        begin
-          prim := True;
-          Break;
-        end;
-      if (prim = True) then
+      if (Prim(i) = True) then
       begin
-        FNumar := i;
-        Synchronize(AfiseazaNumar);
-        Sleep(1);
+        Form1.mmoNumere.Lines.Add(i.ToString + ' prim');
       end;
     end;
+  finally
+    Form1.CS.Leave;
   end;
+end;
+
+function TThreadNumerePrime.Prim(x: Integer): Boolean;
+var
+  limita, j: Integer;
+begin
+  if x = 2 then
+  begin
+    Result := True;
+    Exit;
+  end;
+  j := 2;
+  limita := Ceil(Sqrt(x)) + 1;
+  while j < limita do
+  begin
+    if (x mod j = 0) then
+    begin
+      Result := False;
+      Exit;
+    end;
+    j := j + 1;
+  end;
+  Result := True;
 end;
 
 end.

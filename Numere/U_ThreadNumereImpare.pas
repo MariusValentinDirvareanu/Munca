@@ -2,7 +2,7 @@ unit U_ThreadNumereImpare;
 
 interface
 
-uses Classes, System.SysUtils;
+uses Classes, System.SysUtils, System.SyncObjs;
 
 type
   TThreadNumereImpare = class(TThread)
@@ -12,9 +12,6 @@ type
   public
     constructor Create(bSuspended: Boolean);
 
-  private
-    FNumar: Integer;
-    procedure AfiseazaNumar;
   end;
 
 implementation
@@ -30,24 +27,21 @@ begin
     Resume;
 end;
 
-procedure TThreadNumereImpare.AfiseazaNumar;
-begin
-  Form1.mmoNumere.Text := Form1.mmoNumere.Text + FNumar.ToString + sLineBreak;
-end;
-
 procedure TThreadNumereImpare.Execute;
 var
   i: Integer;
 begin
-  while not Terminated do
-  begin
+  Form1.CS.Enter;
+  try
     for i := -MaxInt + 1 to MaxInt do
+    begin
       if (i mod 2 <> 0) then
       begin
-        FNumar := i;
-        Synchronize(AfiseazaNumar);
-        Sleep(1);
+        Form1.mmoNumere.Lines.Add(i.ToString + ' impar');
       end;
+    end;
+  finally
+    Form1.CS.Leave;
   end;
 end;
 

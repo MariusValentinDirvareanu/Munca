@@ -11,6 +11,7 @@ object Form1: TForm1
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   DesignSize = (
     660
     685)
@@ -30,16 +31,16 @@ object Form1: TForm1
   object btnGenerate: TButton
     Left = 8
     Top = 640
-    Width = 305
+    Width = 289
     Height = 37
     Caption = 'Go!'
     TabOrder = 1
     OnClick = btnGenerateClick
   end
   object btnStop: TButton
-    Left = 352
+    Left = 328
     Top = 640
-    Width = 300
+    Width = 324
     Height = 37
     Caption = 'Stop'
     TabOrder = 2
