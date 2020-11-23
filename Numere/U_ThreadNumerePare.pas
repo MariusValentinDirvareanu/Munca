@@ -8,15 +8,24 @@ type
   TThreadNumerePare = class(TThread)
   protected
     procedure Execute; override;
+    procedure AfisareNumere;
 
   public
     constructor Create(bSuspended: Boolean);
+
+  private
+    Numar: Integer;
 
   end;
 
 implementation
 
-uses U_Main;
+uses F_Main;
+
+procedure TThreadNumerePare.AfisareNumere;
+begin
+  Form1.mmoNumere.Lines.Add(Numar.ToString + ' par');
+end;
 
 constructor TThreadNumerePare.Create(bSuspended: Boolean);
 begin
@@ -31,19 +40,18 @@ procedure TThreadNumerePare.Execute;
 var
   i: Integer;
 begin
-  Form1.CS.Enter;
-  try
-    for i := -MaxInt + 1 to MaxInt do
+  for i := -MaxInt + 1 to MaxInt do
+  begin
+    if Terminated then
     begin
-      if (i mod 2 = 0) then
-      begin
-
-        Form1.mmoNumere.Lines.Add(i.ToString + ' par');
-
-      end;
+      Exit;
     end;
-  finally
-    Form1.CS.Leave;
+    if (i mod 2 = 0) then
+    begin
+      Numar := i;
+      Synchronize(AfisareNumere);
+    end;
+    Sleep(1);
   end;
 end;
 

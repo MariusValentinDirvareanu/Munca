@@ -7,7 +7,7 @@ uses
   madListProcesses,
   madListModules,
   Vcl.Forms,
-  U_Main in 'U_Main.pas' {Form1},
+  F_Main in 'F_Main.pas' {Form1},
   U_ThreadNumerePrime in 'U_ThreadNumerePrime.pas',
   U_ThreadNumerePare in 'U_ThreadNumerePare.pas',
   U_ThreadNumereImpare in 'U_ThreadNumereImpare.pas';

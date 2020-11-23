@@ -8,17 +8,24 @@ type
   TThreadNumerePrime = class(TThread)
   protected
     procedure Execute; override;
+    procedure AfisareNumere;
 
   public
     constructor Create(bSuspended: Boolean);
 
   private
+    Numar: Integer;
     function Prim(x: Integer): Boolean;
   end;
 
 implementation
 
-uses U_Main;
+uses F_Main;
+
+procedure TThreadNumerePrime.AfisareNumere;
+begin
+  Form1.mmoNumere.Lines.Add(Numar.ToString + ' prim');
+end;
 
 constructor TThreadNumerePrime.Create(bSuspended: Boolean);
 begin
@@ -34,17 +41,18 @@ var
   i: Integer;
 
 begin
-  Form1.CS.Enter;
-  try
-    for i := 2 to MaxInt do
+  for i := 2 to MaxInt do
+  begin
+    if Terminated then
     begin
-      if (Prim(i) = True) then
-      begin
-        Form1.mmoNumere.Lines.Add(i.ToString + ' prim');
-      end;
+      Exit;
     end;
-  finally
-    Form1.CS.Leave;
+    if (Prim(i) = True) then
+    begin
+      Numar := i;
+      Synchronize(AfisareNumere);
+    end;
+    Sleep(1);
   end;
 end;
 

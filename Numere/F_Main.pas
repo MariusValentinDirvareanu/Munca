@@ -1,4 +1,4 @@
-unit U_Main;
+unit F_Main;
 
 interface
 
@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, U_ThreadNumerePare,
-  U_ThreadNumereImpare, U_ThreadNumerePrime, System.SyncObjs;
+  U_ThreadNumereImpare, U_ThreadNumerePrime;
 
 type
   TForm1 = class(TForm)
@@ -14,13 +14,10 @@ type
     btnGenerate: TButton;
     btnStop: TButton;
     procedure btnGenerateClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
     procedure btnStopClick(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
-    CS: TCriticalSection;
     { Public declarations }
   end;
 
@@ -40,28 +37,13 @@ begin
   TNumerePare := TThreadNumerePare.Create(False);
   TNumereImpare := TThreadNumereImpare.Create(False);
   TNumerePrime := TThreadNumerePrime.Create(False);
-
-  TNumerePare.FreeOnTerminate := True;
-  TNumereImpare.FreeOnTerminate := True;
-  TNumerePrime.FreeOnTerminate := True;
 end;
 
 procedure TForm1.btnStopClick(Sender: TObject);
 begin
-  // Nu merge
-  TNumerePare.Free;
-  TNumereImpare.Free;
-  TNumerePrime.Free;
-end;
-
-procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
-begin
-  CS.Free;
-end;
-
-procedure TForm1.FormCreate(Sender: TObject);
-begin
-  CS := TCriticalSection.Create;
+  TNumerePare.Terminate;
+  TNumereImpare.Terminate;
+  TNumerePrime.Terminate;
 end;
 
 end.
