@@ -1,11 +1,6 @@
 program Numere;
 
 uses
-  madExcept,
-  madLinkDisAsm,
-  madListHardware,
-  madListProcesses,
-  madListModules,
   Vcl.Forms,
   F_Main in 'F_Main.pas' {Form1},
   U_ThreadNumerePrime in 'U_ThreadNumerePrime.pas',
